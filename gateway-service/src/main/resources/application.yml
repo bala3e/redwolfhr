@@ -13,6 +13,12 @@ spring:
         uri: http://localhost:8761/
         predicates:
           - Path=/eureka/web
+      configRoute3:
+        id: employee-service
+        uri: lb://employee-service
+        predicates:
+          - Path=/api/employee
+
 
 
 #      configRoute3:
