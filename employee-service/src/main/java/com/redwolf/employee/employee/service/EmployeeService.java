@@ -18,33 +18,17 @@ import reactor.core.publisher.Mono;
 
 @Slf4j
 public class EmployeeService {
+
     private final WebClient.Builder webClientBuilder;
 
     private final RestTemplate restTemplate;
+    private final ObservationRegistry observationRegistry;
 
 
 public String employeeLeaveCheck(Employee e){
 
-   /* WebClient webClient = WebClient.builder()
-            .baseUrl("http://leave-service/api/leave")
-            .defaultCookie("cookie-name", "cookie-value")
-            .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-            .build();
-*/
+
     String baseUrl= "http://leave-service";
-   // String baseUrl= "http://localhost:59515";
-/*
-    WebClient client = WebClient.create(baseUrl);
-    Mono<String> mono= client
-            .get()
-            .uri("/api/leave")
-            .retrieve()
-            .bodyToMono(String.class);
-*/
-  //String res=  webClientBuilder.build().get().uri(baseUrl+"/api/leave").
-    //      retrieve().bodyToMono(String.class).block();
-
-
    // String res =restTemplate.getForObject(baseUrl+"/api/leave",String.class);
 
 
@@ -60,4 +44,22 @@ public String employeeLeaveCheck(Employee e){
 }
 
 
+    public String calAsync(Employee e) {
+        Observation inventoryServiceObservation = Observation.createNotStarted("employee-service-lookup",
+                this.observationRegistry);
+        inventoryServiceObservation.lowCardinalityKeyValue("call", "employee-service");
+        String baseUrl= "http://leave-service";
+        return inventoryServiceObservation.observe(() -> {
+           String s= webClientBuilder.baseUrl(baseUrl)
+                    .build()
+                    .get()
+                    .uri("/api/leave")
+                    .accept(MediaType.APPLICATION_JSON)
+                    .retrieve()
+                    .bodyToMono(String.class).block();
+           return s;
+
+   // return  "";
+    });
+    }
 }
