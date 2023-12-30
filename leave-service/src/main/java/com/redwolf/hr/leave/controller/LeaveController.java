@@ -7,10 +7,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/leave")
+
 public class LeaveController {
     @GetMapping
     @ResponseBody
     public String getLeave(){
+        System.out.println("Calling -----------------");
         return "Hello";
     }
 }
