@@ -17,23 +17,21 @@ import java.util.concurrent.CompletableFuture;
 public class EmployeeController {
 @Autowired
     private EmployeeService empService;
- /*   @GetMapping
+    @GetMapping(value = "/date")
     public String helloEmp() {
-        return "Welcome employee at B.VIKRAM-UKG-Jasmine " + new Date();
+        return "Welcome to employee service " + new Date();
     }
-*/
+
   @PostMapping
     public String addEmployee(@RequestBody Employee e) {
-
-     return   empService.employeeLeaveCheck(e);
+        return   empService.employeeLeaveCheck(e);
     }
 
-    @GetMapping
+    @GetMapping(value = "/leave")
     @CircuitBreaker(name = "inventory", fallbackMethod = "fallbackMethod")
     @TimeLimiter(name = "inventory")
     @Retry(name = "inventory")
     public CompletableFuture<String> placeOrder(@RequestBody Employee e) {
-        //log.info("Placing Order");
         return CompletableFuture.supplyAsync(() -> empService.calAsync(e));
     }
     public CompletableFuture<String> fallbackMethod( Employee e, RuntimeException runtimeException) {
