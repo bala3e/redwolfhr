@@ -17,11 +17,11 @@ public class LeaveController {
     public String getLeave(){
         System.out.println("Calling -----------------");
 
-        try{
+     /*   try{
             TimeUnit.SECONDS.sleep(10);
         }catch (Exception e){
             e.printStackTrace();
-        }
+        }*/
 
         return "Hello "+new Date();
     }

@@ -1,4 +1,4 @@
-package com.redwolf.gatewayservice;
+package com.redwolf.gateway;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

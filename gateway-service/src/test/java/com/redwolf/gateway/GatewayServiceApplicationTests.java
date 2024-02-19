@@ -1,4 +1,4 @@
-package com.redwolf.gatewayservice;
+package com.redwolf.gateway;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
