@@ -1,28 +1,36 @@
 package com.redwolf.employee.employee.service;
 
-import com.redwolf.employee.employee.model.Employee;
+import com.redwolf.employee.employee.entity.UserStats;
+import com.redwolf.employee.employee.entity.Employee;
+import com.redwolf.employee.employee.repository.EmployeeRepo;
 import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationRegistry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
+
+import java.util.List;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
 
 @Slf4j
 public class EmployeeService {
-
+    private final Random random = new Random();
     private final WebClient.Builder webClientBuilder;
 
     private final RestTemplate restTemplate;
     private final ObservationRegistry observationRegistry;
+
+    @Autowired
+    private EmployeeRepo employeeRepo;
 
 
 public String employeeLeaveCheck(Employee e){
@@ -30,6 +38,11 @@ public String employeeLeaveCheck(Employee e){
 
     String baseUrl= "http://leave-service";
    // String res =restTemplate.getForObject(baseUrl+"/api/leave",String.class);
+
+    //restTemplate.getForEntity()
+  //  restTemplate.getForObject();
+   // restTemplate.exchange();
+   // restTemplate.
 
 
     String res = webClientBuilder.baseUrl(baseUrl)
@@ -58,8 +71,28 @@ public String employeeLeaveCheck(Employee e){
                     .retrieve()
                     .bodyToMono(String.class).block();
            return s;
-
-   // return  "";
     });
+    }
+
+
+
+
+    @Cacheable(cacheNames = "stats")
+    public List<Employee> getUserStats() {
+
+        return getRequestsCountFromDb();
+    }
+
+
+    private List<Employee> getRequestsCountFromDb() {
+        System.out.println("calling ");
+          List<Employee> emplist=employeeRepo.findAll();
+         return emplist;
+    }
+
+    @CachePut(value="stats")
+    public Employee save(Employee employee){
+
+        return employeeRepo.save(employee);
     }
 }

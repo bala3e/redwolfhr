@@ -1,6 +1,6 @@
 package com.redwolf.employee.employee.controller;
 
-import com.redwolf.employee.employee.model.Employee;
+import com.redwolf.employee.employee.entity.Employee;
 import com.redwolf.employee.employee.service.EmployeeService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
@@ -10,22 +10,34 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("/api/employee")
 public class EmployeeController {
-@Autowired
+    @Autowired
     private EmployeeService empService;
     @GetMapping(value = "/date")
     public String helloEmp() {
         return "Welcome to employee service " + new Date();
     }
 
-  @PostMapping
+  @PostMapping(value = "/addemp")
     public String addEmployee(@RequestBody Employee e) {
         return   empService.employeeLeaveCheck(e);
     }
+
+    @PostMapping(value = "/save")
+    public Employee saveEmployee(@RequestBody Employee e){
+        return empService.save(e);
+    }
+
+    @GetMapping(value = "/getallemp")
+    public List<Employee> getAllEmployee(){
+        return  empService.getUserStats();
+    }
+
 
     @GetMapping(value = "/leave")
     @CircuitBreaker(name = "inventory", fallbackMethod = "fallbackMethod")
