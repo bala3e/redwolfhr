@@ -5,6 +5,7 @@ import com.redwolf.employee.employee.entity.Employee;
 import com.redwolf.employee.employee.repository.EmployeeRepo;
 import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationRegistry;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,5 +95,9 @@ public String employeeLeaveCheck(Employee e){
     public Employee save(Employee employee){
 
         return employeeRepo.save(employee);
+    }
+
+    public Employee getEmployee(Integer ID){
+       return employeeRepo.findById(ID).orElseThrow(() -> new EntityNotFoundException(String.valueOf(ID)));
     }
 }

@@ -38,6 +38,11 @@ public class EmployeeController {
         return  empService.getUserStats();
     }
 
+    @GetMapping(value = "/getemp/{ID}")
+    public Employee getEmployee(@PathVariable Integer ID){
+        return  empService.getEmployee(ID);
+    }
+
 
     @GetMapping(value = "/leave")
     @CircuitBreaker(name = "inventory", fallbackMethod = "fallbackMethod")
