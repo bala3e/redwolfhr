@@ -5,6 +5,7 @@ import com.hazelcast.config.Config;
 import com.hazelcast.config.MapConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
+import com.redwolf.employee.employee.model.Employee;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -45,6 +46,9 @@ public class EmpConfiguration {
         cfg.setClusterName("statsCluster");
         return cfg;
     }
-
+/*  @Bean
+    public Employee getEmpBean(){
+      return  Employee.builder().age(2).name("ANTONY").build();
+  }*/
 
 }

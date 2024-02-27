@@ -1,6 +1,6 @@
 package com.redwolf.employee.employee.service;
 
-import com.redwolf.employee.employee.entity.UserStats;
+
 import com.redwolf.employee.employee.entity.Employee;
 import com.redwolf.employee.employee.repository.EmployeeRepo;
 import io.micrometer.observation.Observation;
@@ -8,6 +8,7 @@ import io.micrometer.observation.ObservationRegistry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
@@ -79,8 +80,7 @@ public String employeeLeaveCheck(Employee e){
 
     @Cacheable(cacheNames = "stats")
     public List<Employee> getUserStats() {
-
-        return getRequestsCountFromDb();
+           return getRequestsCountFromDb();
     }
 
 
@@ -90,7 +90,7 @@ public String employeeLeaveCheck(Employee e){
          return emplist;
     }
 
-    @CachePut(value="stats")
+    @CacheEvict(allEntries = true,cacheNames = "stats")
     public Employee save(Employee employee){
 
         return employeeRepo.save(employee);
